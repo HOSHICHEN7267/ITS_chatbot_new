@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:its_chatbot/pages/chat_page.dart';
 
 void main() {
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
 

@@ -1,4 +1,6 @@
+import 'package:intl/intl.dart';
 import 'package:its_chatbot/components/message_box.dart';
+import 'package:its_chatbot/model/message.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
@@ -13,7 +15,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController inputController = TextEditingController();
 
-  bool isInputSelf = true; // to delete
+  List<Message> messageList = [];
 
   @override
   void initState() {
@@ -89,9 +91,22 @@ class _ChatPageState extends State<ChatPage> {
                           iconSize: screenWidth * 0.056,
                           color: const Color.fromARGB(255, 138, 138, 138),
                           onPressed: () {
-                            setState(() {
-                              inputController.clear();
-                            });
+                            String text = inputController.text;
+
+                            if (text.isNotEmpty) {
+                              String formattedDate =
+                                  DateFormat('HH:mm').format(DateTime.now());
+
+                              setState(() {
+                                messageList.add(Message(
+                                    isSelf: true,
+                                    message: text,
+                                    timestamp: formattedDate));
+                                inputController.clear();
+                              });
+
+                              _askQuestion(text);
+                            }
                           },
                         )
                       ],
@@ -102,32 +117,31 @@ class _ChatPageState extends State<ChatPage> {
         ));
   }
 
+  void _askQuestion(String question) async {
+    String result = "This is the result";
+
+    await Future.delayed(const Duration(seconds: 5), () {
+      if (result.isNotEmpty) {
+        String formattedDate = DateFormat('HH:mm').format(DateTime.now());
+        setState(() {
+          messageList.add(Message(
+              isSelf: false, message: result, timestamp: formattedDate));
+        });
+      }
+    });
+  }
+
   Widget _buildMessageList(double screenHeight) {
     return ListView(
       padding: EdgeInsets.only(
           top: screenHeight * 0.016, bottom: screenHeight * 0.085),
       physics: const BouncingScrollPhysics(),
-      children: const [
-        MessageBox(isSelf: true, message: "Hello, konnichiwa", time: "15:28"),
-        MessageBox(isSelf: false, message: "Hi, nihao", time: "15:29"),
-        MessageBox(
-            isSelf: true, message: "What's up man I'm Antony", time: "15:30"),
-        MessageBox(isSelf: true, message: "Yo, bro M3", time: "15:31"),
-        MessageBox(isSelf: false, message: "Damn, you good man", time: "15:32")
-      ],
+      children: messageList
+          .map((message) => MessageBox(
+              isSelf: message.isSelf,
+              message: message.message,
+              time: message.timestamp))
+          .toList(),
     );
   }
-
-  // Widget _buildMessageItem(DocumentSnapshot document) {
-  //   Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-
-  //   bool self = (data['senderId'] == _auth.currentUser!.uid) ? true : false;
-
-  //   final dateTime = data['timestamp'].toDate();
-  //   final timeFormatter = DateFormat('HH:mm');
-  //   final formattedTime = timeFormatter.format(dateTime);
-
-  //   return MessageBox(
-  //       isSelf: self, message: data['message'], time: formattedTime);
-  // }
 }
