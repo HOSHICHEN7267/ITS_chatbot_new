@@ -16,6 +16,7 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController inputController = TextEditingController();
 
   List<Message> messageList = [];
+  bool isGeneratingResponse = false;
 
   @override
   void initState() {
@@ -95,24 +96,27 @@ class _ChatPageState extends State<ChatPage> {
                           icon: const Icon(Icons.send),
                           iconSize: screenWidth * 0.056,
                           color: const Color.fromARGB(255, 138, 138, 138),
-                          onPressed: () {
-                            String text = inputController.text;
+                          onPressed: isGeneratingResponse
+                              ? null
+                              : () {
+                                  String text = inputController.text;
 
-                            if (text.isNotEmpty) {
-                              String formattedDate =
-                                  DateFormat('HH:mm').format(DateTime.now());
+                                  if (text.isNotEmpty) {
+                                    String formattedDate = DateFormat('HH:mm')
+                                        .format(DateTime.now());
 
-                              setState(() {
-                                messageList.add(Message(
-                                    isSelf: true,
-                                    message: text,
-                                    timestamp: formattedDate));
-                                inputController.clear();
-                              });
+                                    setState(() {
+                                      isGeneratingResponse = true;
+                                      messageList.add(Message(
+                                          isSelf: true,
+                                          message: text,
+                                          timestamp: formattedDate));
+                                      inputController.clear();
+                                    });
 
-                              _askQuestion(text);
-                            }
-                          },
+                                    _askQuestion(text);
+                                  }
+                                },
                         )
                       ],
                     ),
@@ -131,6 +135,7 @@ class _ChatPageState extends State<ChatPage> {
         setState(() {
           messageList.add(Message(
               isSelf: false, message: result, timestamp: formattedDate));
+          isGeneratingResponse = false;
         });
       }
     });
