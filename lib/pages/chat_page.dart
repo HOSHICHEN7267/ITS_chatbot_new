@@ -20,6 +20,11 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
+    String formattedDate = DateFormat('HH:mm').format(DateTime.now());
+    messageList.add(Message(
+        isSelf: false,
+        message: "你好! 這裡是最懂你的(✪ω✪)路線規劃小幫手",
+        timestamp: formattedDate));
   }
 
   @override
