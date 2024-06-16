@@ -37,6 +37,7 @@ dependencies:
   intl: ^0.19.0
   http: ^1.2.1
   dart_openai: ^5.1.0
+  flutter_markdown: ^0.7.2
 
 dev_dependencies:
   flutter_test:
