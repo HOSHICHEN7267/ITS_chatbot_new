@@ -23,6 +23,14 @@ if (flutterVersionName == null) {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file(keystorePath)
+            keyAlias keystoreAlias
+            storePassword storePass
+            keyPassword keyPass
+        }
+    }
     namespace "com.example.its_chatbot"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
