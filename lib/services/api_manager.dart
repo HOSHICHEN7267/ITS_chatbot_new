@@ -37,7 +37,7 @@ class ApiManager{
     }
 
     String TDXtoAI = await tdxUnit.getResult(MAPtoTDX);
-    logger.i('TDXtoAI: $TDXtoAI');
+    // logger.i('TDXtoAI: $TDXtoAI');
     // print('TDXtoAI: Received');
     if (!jsonDecode(TDXtoAI)['result']) {
       return jsonEncode({
@@ -45,6 +45,8 @@ class ApiManager{
         'data': '抱歉，我只會規劃台灣境內的交通路線，如果你要出國的話，我就無法給你幫助了QQ\n如果你還想去其他台灣地點的話，可以再告訴我一次：你的起點、目的地，以及希望省錢還是省時間嗎？'}
       );
     }
+
+    TDXtoAI = '${jsonDecode(AItoMAP)['data']}$TDXtoAI';
 
     String AItoUSER = await openai_send_unit.getResult(TDXtoAI);
     // print('AItoUSER: $AItoUSER');
