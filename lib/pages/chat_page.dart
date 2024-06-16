@@ -68,6 +68,47 @@ class _ChatPageState extends State<ChatPage> {
         curve: Curves.fastOutSlowIn);
   }
 
+  // Send message and pass to api manager
+  void sendMessage() {
+    String text = _inputController.text;
+
+    if (text.isNotEmpty) {
+      String formattedDate = DateFormat('HH:mm').format(DateTime.now());
+
+      setState(() {
+        isGeneratingResponse = true;
+        messageList.add(
+            Message(isSelf: true, message: text, timestamp: formattedDate));
+        _inputController.clear();
+      });
+
+      // Scroll down the listview after sending new message
+      Future.delayed(const Duration(milliseconds: 500), () => scrollDown());
+
+      askQuestion(text);
+    }
+  }
+
+  // Pass question to api manager and wait for response
+  void askQuestion(String question) async {
+    String result = "This is the result";
+
+    await Future.delayed(const Duration(seconds: 2), () {
+      if (result.isNotEmpty) {
+        String formattedDate = DateFormat('HH:mm').format(DateTime.now());
+        String response = "$result 😎";
+        setState(() {
+          messageList.add(Message(
+              isSelf: false, message: response, timestamp: formattedDate));
+          isGeneratingResponse = false;
+        });
+      }
+    });
+
+    // Scroll down the listview after sending new message
+    Future.delayed(const Duration(milliseconds: 500), () => scrollDown());
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -94,25 +135,6 @@ class _ChatPageState extends State<ChatPage> {
         ],
       ),
     );
-  }
-
-  void _askQuestion(String question) async {
-    String result = "This is the result";
-
-    await Future.delayed(const Duration(seconds: 2), () {
-      if (result.isNotEmpty) {
-        String formattedDate = DateFormat('HH:mm').format(DateTime.now());
-        String response = "$result 😎";
-        setState(() {
-          messageList.add(Message(
-              isSelf: false, message: response, timestamp: formattedDate));
-          isGeneratingResponse = false;
-        });
-      }
-    });
-
-    // Scroll down the listview after sending new message
-    Future.delayed(const Duration(milliseconds: 500), () => scrollDown());
   }
 
   Widget _buildMessageList(double screenHeight) {
@@ -179,31 +201,7 @@ class _ChatPageState extends State<ChatPage> {
                 icon: const Icon(Icons.send),
                 iconSize: screenWidth * 0.056,
                 color: const Color.fromARGB(255, 138, 138, 138),
-                onPressed: isGeneratingResponse
-                    ? null
-                    : () {
-                        String text = _inputController.text;
-
-                        if (text.isNotEmpty) {
-                          String formattedDate =
-                              DateFormat('HH:mm').format(DateTime.now());
-
-                          setState(() {
-                            isGeneratingResponse = true;
-                            messageList.add(Message(
-                                isSelf: true,
-                                message: text,
-                                timestamp: formattedDate));
-                            _inputController.clear();
-                          });
-
-                          // Scroll down the listview after sending new message
-                          Future.delayed(const Duration(milliseconds: 500),
-                              () => scrollDown());
-
-                          _askQuestion(text);
-                        }
-                      },
+                onPressed: isGeneratingResponse ? null : () => sendMessage(),
               )
             ],
           ),
