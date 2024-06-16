@@ -19,12 +19,15 @@ class _ChatPageState extends State<ChatPage> {
   List<Message> messageList = [];
   bool isGeneratingResponse = false;
 
-  String initMessage = '''# 你好!
-## 這裡是最懂你的(✪ω✪)路線規劃小幫手
-### 這是第三大的 title
-*斜體字測試*
-**粗體字測試**
-這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體
+  String initMessage = '''哈囉你好哇！🤗
+
+我是最懂你的(✪ω✪)智能路線規劃小幫手
+
+想去台灣的哪裡呀？
+
+簡單的告訴我出發地點及目的地，我就能幫你找到適合的交通傳承方式喔！😎
+
+如果有比較想省錢、或是省時間，也可以一起跟我說唷 (⁠｡⁠•̀⁠ᴗ⁠-⁠)⁠✧
 ''';
 
   @override
