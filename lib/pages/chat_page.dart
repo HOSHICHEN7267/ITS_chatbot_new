@@ -1,7 +1,10 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:its_chatbot/components/message_box.dart';
 import 'package:its_chatbot/model/message.dart';
-import 'package:flutter/material.dart';
+import 'package:its_chatbot/services/apiManager.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiverName;
@@ -15,6 +18,8 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _inputController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+
+  final ApiManager _apiManager = ApiManager();
 
   // For textfield focus (auto scroll when keyboard shows up)
   FocusNode textFieldFocusNode = FocusNode();
@@ -91,19 +96,25 @@ class _ChatPageState extends State<ChatPage> {
 
   // Pass question to api manager and wait for response
   void askQuestion(String question) async {
-    String result = "This is the result";
+    String result = await _apiManager.getResult(question);
 
-    await Future.delayed(const Duration(seconds: 2), () {
-      if (result.isNotEmpty) {
-        String formattedDate = DateFormat('HH:mm').format(DateTime.now());
-        String response = "$result 😎";
-        setState(() {
-          messageList.add(Message(
-              isSelf: false, message: response, timestamp: formattedDate));
-          isGeneratingResponse = false;
-        });
+    if (result.isNotEmpty) {
+      String formattedDate = DateFormat('HH:mm').format(DateTime.now());
+      Map<String, dynamic> response = jsonDecode(result);
+      String outputMessage = response['data'];
+
+      if (response['result']) {
+        outputMessage = "$outputMessage 😎";
+      } else {
+        outputMessage = "$outputMessage 🥺";
       }
-    });
+
+      setState(() {
+        messageList.add(Message(
+            isSelf: false, message: outputMessage, timestamp: formattedDate));
+        isGeneratingResponse = false;
+      });
+    }
 
     // Scroll down the listview after sending new message
     Future.delayed(const Duration(milliseconds: 500), () => scrollDown());
