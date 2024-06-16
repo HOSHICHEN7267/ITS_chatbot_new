@@ -6,8 +6,6 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized(); // To let systemChrome get to work
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-      overlays: [SystemUiOverlay.top]);
   runApp(const MyApp());
 }
 

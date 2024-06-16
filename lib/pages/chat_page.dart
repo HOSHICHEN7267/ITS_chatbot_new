@@ -13,7 +13,11 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final TextEditingController inputController = TextEditingController();
+  final TextEditingController _inputController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  // For textfield focus (auto scroll when keyboard shows up)
+  FocusNode textFieldFocusNode = FocusNode();
 
   // State management
   List<Message> messageList = [];
@@ -33,9 +37,35 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
+
+    // Add a listener to focus node
+    textFieldFocusNode.addListener(() {
+      if (textFieldFocusNode.hasFocus) {
+        // Scroll down the listview automatically
+        Future.delayed(const Duration(milliseconds: 500), () => scrollDown());
+      }
+    });
+
+    // When entering the chat room, scroll down the listview too
+    Future.delayed(const Duration(milliseconds: 500), () => scrollDown());
+
+    // Add initial message (welcome message)
     String formattedDate = DateFormat('HH:mm').format(DateTime.now());
     messageList.add(
         Message(isSelf: false, message: initMessage, timestamp: formattedDate));
+  }
+
+  @override
+  void dispose() {
+    textFieldFocusNode.dispose();
+    _inputController.dispose();
+    super.dispose();
+  }
+
+  void scrollDown() {
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn);
   }
 
   @override
@@ -44,29 +74,32 @@ class _ChatPageState extends State<ChatPage> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: Theme.of(context).colorScheme.primary,
-        appBar: AppBar(
-          scrolledUnderElevation: 0.0,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: Text(
-            widget.receiverName,
-            style: TextStyle(fontSize: screenWidth * 0.047),
-          ),
-          centerTitle: true,
-          shape: const Border(bottom: BorderSide(color: Colors.grey, width: 3)),
+        title: Text(
+          widget.receiverName,
+          style: TextStyle(fontSize: screenWidth * 0.047),
         ),
-        body: Column(
-          children: <Widget>[
-            _buildMessageList(screenHeight),
-            _buildInputBox(screenWidth, screenHeight),
-          ],
-        ));
+        centerTitle: true,
+        shape: const Border(bottom: BorderSide(color: Colors.grey, width: 3)),
+      ),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          _buildMessageList(screenHeight),
+          _buildInputBox(screenWidth, screenHeight),
+        ],
+      ),
+    );
   }
 
   void _askQuestion(String question) async {
     String result = "This is the result";
 
-    await Future.delayed(const Duration(seconds: 5), () {
+    await Future.delayed(const Duration(seconds: 2), () {
       if (result.isNotEmpty) {
         String formattedDate = DateFormat('HH:mm').format(DateTime.now());
         String response = "$result 😎";
@@ -77,11 +110,15 @@ class _ChatPageState extends State<ChatPage> {
         });
       }
     });
+
+    // Scroll down the listview after sending new message
+    Future.delayed(const Duration(milliseconds: 500), () => scrollDown());
   }
 
   Widget _buildMessageList(double screenHeight) {
     return Expanded(
       child: ListView(
+        controller: _scrollController,
         shrinkWrap: true,
         padding: EdgeInsets.only(top: screenHeight * 0.016),
         physics: const BouncingScrollPhysics(),
@@ -96,79 +133,80 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildInputBox(double screenWidth, double screenHeight) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-          width: screenWidth,
-          height: screenHeight * 0.07,
-          color: Theme.of(context).colorScheme.primary,
-          alignment: Alignment.topCenter,
-          child: Container(
-            height: screenHeight * 0.055,
-            width: screenWidth * 0.9,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                    color: const Color.fromARGB(255, 219, 219, 219),
-                    width: 3.5)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  width: screenWidth * 0.024,
-                ),
-                Expanded(
-                    child: TextField(
-                  minLines: 1,
-                  maxLines: 6,
-                  controller: inputController,
-                  keyboardType: TextInputType.multiline,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: screenWidth * 0.049, height: 1),
-                  cursorColor: Colors.black,
-                  cursorWidth: 2.5,
-                  decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(0.0),
-                      hintText: isGeneratingResponse
-                          ? "Generating response..."
-                          : "Input message here",
-                      hintStyle: TextStyle(
-                          color: const Color.fromARGB(255, 173, 173, 173),
-                          fontSize: screenWidth * 0.045,
-                          fontWeight: FontWeight.normal),
-                      border: InputBorder.none),
-                )),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  iconSize: screenWidth * 0.056,
-                  color: const Color.fromARGB(255, 138, 138, 138),
-                  onPressed: isGeneratingResponse
-                      ? null
-                      : () {
-                          String text = inputController.text;
+    return Container(
+        width: screenWidth,
+        height: screenHeight * 0.07,
+        color: Theme.of(context).colorScheme.primary,
+        alignment: Alignment.topCenter,
+        child: Container(
+          height: screenHeight * 0.055,
+          width: screenWidth * 0.9,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(
+                  color: const Color.fromARGB(255, 219, 219, 219), width: 3.5)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                width: screenWidth * 0.024,
+              ),
+              Expanded(
+                  child: TextField(
+                focusNode: textFieldFocusNode,
+                minLines: 1,
+                maxLines: 6,
+                controller: _inputController,
+                keyboardType: TextInputType.multiline,
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: screenWidth * 0.049, height: 1),
+                cursorColor: Colors.black,
+                cursorWidth: 2.5,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(0.0),
+                    hintText: isGeneratingResponse
+                        ? "Generating response..."
+                        : "Input message here",
+                    hintStyle: TextStyle(
+                        color: const Color.fromARGB(255, 173, 173, 173),
+                        fontSize: screenWidth * 0.045,
+                        fontWeight: FontWeight.normal),
+                    border: InputBorder.none),
+              )),
+              IconButton(
+                icon: const Icon(Icons.send),
+                iconSize: screenWidth * 0.056,
+                color: const Color.fromARGB(255, 138, 138, 138),
+                onPressed: isGeneratingResponse
+                    ? null
+                    : () {
+                        String text = _inputController.text;
 
-                          if (text.isNotEmpty) {
-                            String formattedDate =
-                                DateFormat('HH:mm').format(DateTime.now());
+                        if (text.isNotEmpty) {
+                          String formattedDate =
+                              DateFormat('HH:mm').format(DateTime.now());
 
-                            setState(() {
-                              isGeneratingResponse = true;
-                              messageList.add(Message(
-                                  isSelf: true,
-                                  message: text,
-                                  timestamp: formattedDate));
-                              inputController.clear();
-                            });
+                          setState(() {
+                            isGeneratingResponse = true;
+                            messageList.add(Message(
+                                isSelf: true,
+                                message: text,
+                                timestamp: formattedDate));
+                            _inputController.clear();
+                          });
 
-                            _askQuestion(text);
-                          }
-                        },
-                )
-              ],
-            ),
-          )),
-    );
+                          // Scroll down the listview after sending new message
+                          Future.delayed(const Duration(milliseconds: 500),
+                              () => scrollDown());
+
+                          _askQuestion(text);
+                        }
+                      },
+              )
+            ],
+          ),
+        ));
   }
 }
