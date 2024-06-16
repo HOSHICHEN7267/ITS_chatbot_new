@@ -115,7 +115,7 @@ class TdxUnit{
       headers: getDataHeader(accessToken)
     );
     Map<String, dynamic> responseDecoded = jsonDecode(response.body);
-    if(responseDecoded['result']=='fail'){
+    if(responseDecoded['result']=='fail' || responseDecoded['data']['routes'].isEmpty){
       return jsonEncode({
         'result': false, 
         'message': responseDecoded['error']
@@ -135,14 +135,18 @@ Future<void> main() async{
   
   TdxUnit tdxUnit = TdxUnit();
 
-  String input = await mapUnit.getResult(
-    jsonEncode([{
-      'origin': '板橋車站', 
-      'destination': '台北市政府', 
-      'preference': '省時間'
-    }])
-  );
+  // String input = await mapUnit.getResult(
+  //   jsonEncode([{
+  //     'origin': '板橋車站', 
+  //     'destination': '台北市政府', 
+  //     'preference': '省時間'
+  //   }])
+  // );
+
+  String input = ''' {"result":true,"data":{"origin":[120.960515,23.69781],"destination":[120.960515,23.69781],"gc":1}} ''';
 
   String result = await tdxUnit.getResult(input);
-  stdout.write('Length of result: ' + result.length.toString());
+
+  print(result);
+  // stdout.write('Length of result: ' + result.length.toString());
 }
