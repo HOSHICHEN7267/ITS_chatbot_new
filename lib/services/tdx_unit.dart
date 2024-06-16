@@ -1,9 +1,9 @@
-import 'dart:io';
+// import 'dart:io';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
-import 'mapUnit.dart' as mapUnit;
+// import 'mapUnit.dart' as mapUnit;
 import 'config.dart' as config;
 
 
@@ -131,22 +131,22 @@ class TdxUnit{
 
 
 // For debugging
-Future<void> main() async{
+// Future<void> main() async{
   
-  TdxUnit tdxUnit = TdxUnit();
+//   TdxUnit tdxUnit = TdxUnit();
 
-  // String input = await mapUnit.getResult(
-  //   jsonEncode([{
-  //     'origin': '板橋車站', 
-  //     'destination': '台北市政府', 
-  //     'preference': '省時間'
-  //   }])
-  // );
+//   // String input = await mapUnit.getResult(
+//   //   jsonEncode([{
+//   //     'origin': '板橋車站', 
+//   //     'destination': '台北市政府', 
+//   //     'preference': '省時間'
+//   //   }])
+//   // );
 
-  String input = ''' {"result":true,"data":{"origin":[120.960515,23.69781],"destination":[120.960515,23.69781],"gc":1}} ''';
+//   String input = ''' {"result":true,"data":{"origin":[120.960515,23.69781],"destination":[120.960515,23.69781],"gc":1}} ''';
 
-  String result = await tdxUnit.getResult(input);
+//   String result = await tdxUnit.getResult(input);
 
-  print(result);
-  // stdout.write('Length of result: ' + result.length.toString());
-}
+//   print(result);
+//   // stdout.write('Length of result: ' + result.length.toString());
+// }

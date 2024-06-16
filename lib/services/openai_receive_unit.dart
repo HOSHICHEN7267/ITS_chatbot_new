@@ -123,11 +123,11 @@ Future<String> getResult(String input) async {
   }
 }
 
-Future<void> main() async {
+// Future<void> main() async {
 
-  String inputString = " ";
-  String AItoMAP = await getResult(inputString);
-  print('AItoMAP: $AItoMAP');
+//   String inputString = " ";
+//   String AItoMAP = await getResult(inputString);
+//   print('AItoMAP: $AItoMAP');
   
   // String testString = '{"origin": "台北", "destination": "高雄", "preference": "省錢"}';
   // print(isValidResult(testString)); 
@@ -143,4 +143,4 @@ Future<void> main() async {
 
   // String errorTestString = 'djioerufhjnvd';
   // print(isValidResult(errorTestString)); 
-}
+// }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:its_chatbot/components/message_box.dart';
 import 'package:its_chatbot/model/message.dart';
-import 'package:its_chatbot/services/apiManager.dart';
+import 'package:its_chatbot/services/api_manager.dart';
 
 class ChatPage extends StatefulWidget {
   final String title;

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'config.dart' as config;
 
 Future<Map<String, double>> getGeocode(String location, String apiKey) async {
-  final String baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
+  const String baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
   final Uri uri = Uri.parse('$baseUrl?address=$location&key=$apiKey');
 
   final http.Response response = await http.get(uri);

@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'openai_receiveUnit.dart' as openai_receiveUnit;
-import 'mapUnit.dart' as mapUnit;
-import 'tdxUnit.dart.';
-import 'openai_sendUnit.dart' as openai_sendUnit;
+import 'openai_receive_unit.dart' as openai_receive_unit;
+import 'map_unit.dart' as map_unit;
+import 'tdx_unit.dart.';
+import 'openai_send_unit.dart' as openai_send_unit;
 
 class ApiManager{
 
@@ -15,7 +15,7 @@ class ApiManager{
       return "抱歉，你的訊息有點太長了，我小小的腦袋裝不下QQ\n可以麻煩你用簡短的文字告訴我，你的起點、目的地，以及希望省錢還是省時間嗎？";
     }
 
-    String AItoMAP = await openai_receiveUnit.getResult(inputString);
+    String AItoMAP = await openai_receive_unit.getResult(inputString);
     // print('AItoMAP: $AItoMAP');
     if (!jsonDecode(AItoMAP)['result']) {
       return jsonEncode({
@@ -24,7 +24,7 @@ class ApiManager{
       );
     }
 
-    String MAPtoTDX = await mapUnit.getResult(AItoMAP);
+    String MAPtoTDX = await map_unit.getResult(AItoMAP);
     // print('MAPtoTDX: $MAPtoTDX');
     if (!jsonDecode(MAPtoTDX)['result']) {
       return jsonEncode({
@@ -43,7 +43,7 @@ class ApiManager{
       );
     }
 
-    String AItoUSER = await openai_sendUnit.getResult(TDXtoAI);
+    String AItoUSER = await openai_send_unit.getResult(TDXtoAI);
     // print('AItoUSER: $AItoUSER');
     if (!jsonDecode(AItoUSER)['result']) {
       return jsonEncode({
