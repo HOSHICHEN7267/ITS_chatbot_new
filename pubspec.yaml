@@ -38,6 +38,7 @@ dependencies:
   http: ^1.2.1
   dart_openai: ^5.1.0
   flutter_markdown: ^0.7.2
+  logger: ^1.0.0
 
 dev_dependencies:
   flutter_test:

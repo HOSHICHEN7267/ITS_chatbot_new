@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:logger/logger.dart';
 import 'openai_receive_unit.dart' as openai_receive_unit;
 import 'map_unit.dart' as map_unit;
 import 'tdx_unit.dart.';
@@ -75,5 +76,7 @@ Future<void> main() async {
     outputMessage = response['data'];
   }
 
-  print(outputMessage);
+  final logger = Logger();
+  logger.i(outputMessage);
+  // print(outputMessage);
 }
