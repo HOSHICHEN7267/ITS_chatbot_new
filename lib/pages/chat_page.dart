@@ -121,7 +121,7 @@ class _ChatPageState extends State<ChatPage> {
         controller: _scrollController,
         shrinkWrap: true,
         padding: EdgeInsets.only(top: screenHeight * 0.016),
-        physics: const BouncingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         children: messageList
             .map((message) => MessageBox(
                 isSelf: message.isSelf,
