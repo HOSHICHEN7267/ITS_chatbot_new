@@ -44,18 +44,22 @@ class TdxUnit{
   String getUrl(){
     String transitStr = userInput['transit'][0].toString();
     for (var i=1; i<userInput['transit'].length; ++i) {
-      transitStr += '%2C' + userInput['transit'][i].toString();
+      transitStr += '%2C${userInput['transit'][i]}';
     }
 
-    return 'https://tdx.transportdata.tw/api/maas/routing' + 
-    '?origin=' + userInput['origin'][1].toString() + '%2C' + userInput['origin'][0].toString() + 
-    '&destination=' + userInput['destination'][1].toString() + '%2C' + userInput['destination'][0].toString() + 
-    '&gc=' + userInput['gc'].toString() + 
-    '&top=1&transit=' + transitStr + 
-    '&transfer_time=0%2C30' +   // 轉乘時間容許值 0-30 min
-    '&depart=' + formatTime(userInput['depart']) + 
-    '&arrival=' + formatTime(userInput['arrival']) + 
-    '&first_mile_mode=0&first_mile_time=30&last_mile_mode=0&last_mile_time=30';
+    return '''
+      https://tdx.transportdata.tw/api/maas/routing
+      ?origin=${userInput['origin'][1]}%2C${userInput['origin'][0]}
+      &destination=${userInput['destination'][1]}%2C${userInput['destination'][0]}
+      &gc=${userInput['gc']}
+      &top=1&transit=$transitStr
+      &transfer_time=0%2C30
+      &depart=${formatTime(userInput['depart'])}
+      &arrival=${formatTime(userInput['arrival'])}
+      &first_mile_mode=0
+      &first_mile_time=30
+      &last_mile_mode=0
+      &last_mile_time=30''';
   }
   
   Map<String, String> getAuthHeader(){
@@ -72,7 +76,7 @@ class TdxUnit{
   }
   Map<String, String> getDataHeader(String accessToken){
     return {
-      'authorization': 'Bearer ' + accessToken,
+      'authorization': 'Bearer $accessToken',
       'Accept-Encoding': 'gzip'
     };
   }
@@ -103,8 +107,8 @@ class TdxUnit{
       return jsonEncode(input);
     }
     input['data']['transit'] = [3, 4, 5, 6, 7, 8, 9];
-    input['data']['depart'] = DateTime.now().add(Duration(minutes: 5));
-    input['data']['arrival'] = DateTime.now().add(Duration(days: 1));
+    input['data']['depart'] = DateTime.now().add(const Duration(minutes: 5));
+    input['data']['arrival'] = DateTime.now().add(const Duration(days: 1));
 
     updateUserInput(input['data']);
 
