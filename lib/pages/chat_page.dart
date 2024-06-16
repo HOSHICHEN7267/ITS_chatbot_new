@@ -7,9 +7,9 @@ import 'package:its_chatbot/model/message.dart';
 import 'package:its_chatbot/services/apiManager.dart';
 
 class ChatPage extends StatefulWidget {
-  final String receiverName;
+  final String title;
 
-  const ChatPage({super.key, required this.receiverName});
+  const ChatPage({super.key, required this.title});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -132,7 +132,7 @@ class _ChatPageState extends State<ChatPage> {
         scrolledUnderElevation: 0.0,
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(
-          widget.receiverName,
+          widget.title,
           style: TextStyle(fontSize: screenWidth * 0.047),
         ),
         centerTitle: true,

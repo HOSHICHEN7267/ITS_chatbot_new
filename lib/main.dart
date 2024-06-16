@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
               tertiary: const Color.fromARGB(255, 147, 230, 150)),
           useMaterial3: true,
         ),
-        home: const ChatPage(receiverName: '(✪ω✪)'),
+        home: const ChatPage(title: '(✪ω✪)'),
       ),
     );
   }
