@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class MessageBox extends StatelessWidget {
   final bool isSelf;
@@ -45,10 +46,15 @@ class MessageBox extends StatelessWidget {
                         Radius.circular(15.0),
                       ),
                     ),
-                    child: Text(message,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: screenWidth * 0.045)),
+                    child: MarkdownBody(
+                      data: message,
+                      styleSheet: MarkdownStyleSheet(
+                          textScaler: const TextScaler.linear(1.25)),
+                    ),
+                    // child: Text(message,
+                    //     style: TextStyle(
+                    //         color: Colors.black,
+                    //         fontSize: screenWidth * 0.045)),
                   ),
                 ],
               ),
@@ -88,10 +94,15 @@ class MessageBox extends StatelessWidget {
                               Radius.circular(15.0),
                             ),
                           ),
-                          child: Text(message,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: screenWidth * 0.045)),
+                          child: MarkdownBody(
+                            data: message,
+                            styleSheet: MarkdownStyleSheet(
+                                textScaler: const TextScaler.linear(1.25)),
+                          ),
+                          // child: Text(message,
+                          //     style: TextStyle(
+                          //         color: Colors.black,
+                          //         fontSize: screenWidth * 0.045)),
                         ),
                       ],
                     ),

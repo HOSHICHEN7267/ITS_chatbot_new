@@ -15,17 +15,24 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController inputController = TextEditingController();
 
+  // State management
   List<Message> messageList = [];
   bool isGeneratingResponse = false;
+
+  String initMessage = '''# 你好!
+## 這裡是最懂你的(✪ω✪)路線規劃小幫手
+### 這是第三大的 title
+*斜體字測試*
+**粗體字測試**
+這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體這是預設字體
+''';
 
   @override
   void initState() {
     super.initState();
     String formattedDate = DateFormat('HH:mm').format(DateTime.now());
-    messageList.add(Message(
-        isSelf: false,
-        message: "你好! 這裡是最懂你的(✪ω✪)路線規劃小幫手",
-        timestamp: formattedDate));
+    messageList.add(
+        Message(isSelf: false, message: initMessage, timestamp: formattedDate));
   }
 
   @override
