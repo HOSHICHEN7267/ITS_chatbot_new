@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:logger/logger.dart';
 import 'openai_receive_unit.dart' as openai_receive_unit;
 import 'map_unit.dart' as map_unit;
 import 'tdx_unit.dart.';
 import 'openai_send_unit.dart' as openai_send_unit;
+
+final logger = Logger();
 
 class ApiManager{
 
@@ -16,7 +19,7 @@ class ApiManager{
     }
 
     String AItoMAP = await openai_receive_unit.getResult(inputString);
-    // print('AItoMAP: $AItoMAP');
+    logger.i('AItoMAP: $AItoMAP');
     if (!jsonDecode(AItoMAP)['result']) {
       return jsonEncode({
         'result': false, 
@@ -25,7 +28,7 @@ class ApiManager{
     }
 
     String MAPtoTDX = await map_unit.getResult(AItoMAP);
-    // print('MAPtoTDX: $MAPtoTDX');
+    logger.i('MAPtoTDX: $MAPtoTDX');
     if (!jsonDecode(MAPtoTDX)['result']) {
       return jsonEncode({
         'result': false, 
@@ -34,7 +37,7 @@ class ApiManager{
     }
 
     String TDXtoAI = await tdxUnit.getResult(MAPtoTDX);
-    // print('TDXtoAI: $TDXtoAI');
+    // logger.i('TDXtoAI: $TDXtoAI');
     // print('TDXtoAI: Received');
     if (!jsonDecode(TDXtoAI)['result']) {
       return jsonEncode({
@@ -42,6 +45,8 @@ class ApiManager{
         'data': '抱歉，我只會規劃台灣境內的交通路線，如果你要出國的話，我就無法給你幫助了QQ\n如果你還想去其他台灣地點的話，可以再告訴我一次：你的起點、目的地，以及希望省錢還是省時間嗎？'}
       );
     }
+
+    TDXtoAI = '${jsonDecode(AItoMAP)['data']}$TDXtoAI';
 
     String AItoUSER = await openai_send_unit.getResult(TDXtoAI);
     // print('AItoUSER: $AItoUSER');
@@ -75,5 +80,6 @@ Future<void> main() async {
     outputMessage = response['data'];
   }
 
-  print(outputMessage);
+  logger.i(outputMessage);
+  // print(outputMessage);
 }

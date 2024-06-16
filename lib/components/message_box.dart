@@ -67,10 +67,11 @@ class MessageBox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Icon(
-                  Icons.account_circle_rounded,
-                  color: Colors.black,
-                  size: screenWidth * 0.145,
+                Image.asset(
+                  'assets/headshot.jpg',
+                  width: screenWidth * 0.145,
+                  height: screenWidth * 0.145,
+                  fit: BoxFit.cover,
                 ),
                 SizedBox(
                   width: screenWidth * 0.012,
