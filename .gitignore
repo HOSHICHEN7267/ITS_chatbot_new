@@ -44,3 +44,8 @@ app.*.map.json
 
 # Secret key
 /lib/services/config.dart
+
+# Maybe some dependencies
+/linux/flutter
+/macos/Flutter
+/windows/flutter
