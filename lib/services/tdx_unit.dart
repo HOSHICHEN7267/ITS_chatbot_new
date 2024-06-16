@@ -47,19 +47,7 @@ class TdxUnit{
       transitStr += '%2C${userInput['transit'][i]}';
     }
 
-    return '''
-      https://tdx.transportdata.tw/api/maas/routing
-      ?origin=${userInput['origin'][1]}%2C${userInput['origin'][0]}
-      &destination=${userInput['destination'][1]}%2C${userInput['destination'][0]}
-      &gc=${userInput['gc']}
-      &top=1&transit=$transitStr
-      &transfer_time=0%2C30
-      &depart=${formatTime(userInput['depart'])}
-      &arrival=${formatTime(userInput['arrival'])}
-      &first_mile_mode=0
-      &first_mile_time=30
-      &last_mile_mode=0
-      &last_mile_time=30''';
+    return 'https://tdx.transportdata.tw/api/maas/routing?origin=${userInput['origin'][1]}%2C${userInput['origin'][0]}&destination=${userInput['destination'][1]}%2C${userInput['destination'][0]}&gc=${userInput['gc']}&top=1&transit=$transitStr&transfer_time=0%2C30&depart=${formatTime(userInput['depart'])}&arrival=${formatTime(userInput['arrival'])}&first_mile_mode=0&first_mile_time=30&last_mile_mode=0&last_mile_time=30';
   }
   
   Map<String, String> getAuthHeader(){

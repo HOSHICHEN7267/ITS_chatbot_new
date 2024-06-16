@@ -5,6 +5,8 @@ import 'map_unit.dart' as map_unit;
 import 'tdx_unit.dart.';
 import 'openai_send_unit.dart' as openai_send_unit;
 
+final logger = Logger();
+
 class ApiManager{
 
   TdxUnit tdxUnit = TdxUnit();
@@ -17,7 +19,7 @@ class ApiManager{
     }
 
     String AItoMAP = await openai_receive_unit.getResult(inputString);
-    // print('AItoMAP: $AItoMAP');
+    logger.i('AItoMAP: $AItoMAP');
     if (!jsonDecode(AItoMAP)['result']) {
       return jsonEncode({
         'result': false, 
@@ -26,7 +28,7 @@ class ApiManager{
     }
 
     String MAPtoTDX = await map_unit.getResult(AItoMAP);
-    // print('MAPtoTDX: $MAPtoTDX');
+    logger.i('MAPtoTDX: $MAPtoTDX');
     if (!jsonDecode(MAPtoTDX)['result']) {
       return jsonEncode({
         'result': false, 
@@ -35,7 +37,7 @@ class ApiManager{
     }
 
     String TDXtoAI = await tdxUnit.getResult(MAPtoTDX);
-    // print('TDXtoAI: $TDXtoAI');
+    logger.i('TDXtoAI: $TDXtoAI');
     // print('TDXtoAI: Received');
     if (!jsonDecode(TDXtoAI)['result']) {
       return jsonEncode({
@@ -76,7 +78,6 @@ Future<void> main() async {
     outputMessage = response['data'];
   }
 
-  final logger = Logger();
   logger.i(outputMessage);
   // print(outputMessage);
 }
