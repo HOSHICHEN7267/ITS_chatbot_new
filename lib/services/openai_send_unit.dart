@@ -49,7 +49,7 @@ $question
 
   OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
     model: "gpt-3.5-turbo-1106",
-    seed:6,
+    seed: 6,
     messages: requestMessages,
     temperature: 0,
     maxTokens: 1024,
@@ -67,22 +67,15 @@ Future<String> getResult(String inputString) async {
   try {
     OpenAI.apiKey = config.properties['API_KEY']['openai'];
     String result = await extractInfo(inputString);
-    return jsonEncode({
-      'result': true, 
-      'data': result
-    });
+    return jsonEncode({'result': true, 'data': result});
   } catch (e) {
-    return jsonEncode({
-      'result': false, 
-      'message': '$e'}
-    );
+    return jsonEncode({'result': false, 'message': '$e'});
   }
 }
 
-
-
-// Future<void> main() async{
-//   String input = '{"result":"success","data.routes":[{"travel_time":481,"start_time":"2024-06-17T06:55:45","day":1,"end_time":"2024-06-17T07:03:46","transfers":0,"sections":[{"type":"pedestrian","actions":[{"action":"depart","duration":103},{"action":"arrive","duration":0}],"travelSummary":{"duration":103,"length":144.16507},"departure":{"time":"2024-06-17T06:55:45","place":{"type":"place","location":{"lat":25.069874,"lng":121.520187}}},"arrival":{"time":"2024-06-17T06:57:28","place":{"name":"圓山圓山站 出口1","type":"entrance","location":{"lat":25.070786,"lng":121.520035}}},"transport":{"mode":"pedestrian"}},{"type":"pedestrian-station","actions":[{"action":"depart","duration":88},{"action":"arrive","duration":0}],"travelSummary":{"duration":88,"length":0},"departure":{"time":"2024-06-17T06:57:28","place":{"name":"圓山圓山站 出口1","type":"entrance","location":{"lat":25.070786,"lng":121.520035}}},"arrival":{"time":"2024-06-17T06:58:56","place":{"name":"圓山","type":"station","location":{"lat":25.071409,"lng":121.520073}}},"transport":{"mode":"pedestrian"}},{"type":"transit","travelSummary":{"duration":88,"length":0},"departure":{"time":"2024-06-17T06:58:56","place":{"name":"圓山","type":"station","location":{"lat":25.071409,"lng":121.520073}}},"arrival":{"time":"2024-06-17T07:00:24","place":{"name":"民權西路","type":"station","location":{"lat":25.062349,"lng":121.519585}}},"transport":{"mode":"MRT","name":"淡水信義線","category":"MRT","headsign":"象山","shortName":"淡水信義線","longName":"象山－淡水","route_color":"d90023","number":"","type":"MRT","city":"","fareTW":0},"intermediateStops":[],"agency":{"agency_id":"TRTC","name":"臺北大眾捷運股份有限公司","website":"http://www.metro.taipei/","reserve":"0","phone":"02-218-12345"}},{"type":"pedestrian-station","actions":[{"action":"depart","duration":183},{"action":"arrive","duration":0}],"travelSummary":{"duration":183,"length":0},"departure":{"time":"2024-06-17T07:00:24","place":{"name":"民權西路","type":"station","location":{"lat":25.062349,"lng":121.519585}}},"arrival":{"time":"2024-06-17T07:03:27","place":{"name":"民權西路站 出口10","type":"exit","location":{"lat":25.063063,"lng":121.519791}}},"transport":{"mode":"pedestrian"}},{"type":"pedestrian","actions":[{"action":"depart","duration":19},{"action":"arrive","duration":0}],"travelSummary":{"duration":19,"length":27.458063},"departure":{"time":"2024-06-17T07:03:27","place":{"name":"民權西路站 出口10","type":"exit","location":{"lat":25.063063,"lng":121.519791}}},"arrival":{"time":"2024-06-17T07:03:46","place":{"type":"place","location":{"lat":25.063082,"lng":121.5196}}},"transport":{"mode":"pedestrian"}}]}]}';
-//   String result = await getResult(input);
-//   print(result);
-// }
+Future<void> main() async {
+  String input =
+      '{"result":"success","data.routes":[{"travel_time":481,"start_time":"2024-06-17T06:55:45","day":1,"end_time":"2024-06-17T07:03:46","transfers":0,"sections":[{"type":"pedestrian","actions":[{"action":"depart","duration":103},{"action":"arrive","duration":0}],"travelSummary":{"duration":103,"length":144.16507},"departure":{"time":"2024-06-17T06:55:45","place":{"type":"place","location":{"lat":25.069874,"lng":121.520187}}},"arrival":{"time":"2024-06-17T06:57:28","place":{"name":"圓山圓山站 出口1","type":"entrance","location":{"lat":25.070786,"lng":121.520035}}},"transport":{"mode":"pedestrian"}},{"type":"pedestrian-station","actions":[{"action":"depart","duration":88},{"action":"arrive","duration":0}],"travelSummary":{"duration":88,"length":0},"departure":{"time":"2024-06-17T06:57:28","place":{"name":"圓山圓山站 出口1","type":"entrance","location":{"lat":25.070786,"lng":121.520035}}},"arrival":{"time":"2024-06-17T06:58:56","place":{"name":"圓山","type":"station","location":{"lat":25.071409,"lng":121.520073}}},"transport":{"mode":"pedestrian"}},{"type":"transit","travelSummary":{"duration":88,"length":0},"departure":{"time":"2024-06-17T06:58:56","place":{"name":"圓山","type":"station","location":{"lat":25.071409,"lng":121.520073}}},"arrival":{"time":"2024-06-17T07:00:24","place":{"name":"民權西路","type":"station","location":{"lat":25.062349,"lng":121.519585}}},"transport":{"mode":"MRT","name":"淡水信義線","category":"MRT","headsign":"象山","shortName":"淡水信義線","longName":"象山－淡水","route_color":"d90023","number":"","type":"MRT","city":"","fareTW":0},"intermediateStops":[],"agency":{"agency_id":"TRTC","name":"臺北大眾捷運股份有限公司","website":"http://www.metro.taipei/","reserve":"0","phone":"02-218-12345"}},{"type":"pedestrian-station","actions":[{"action":"depart","duration":183},{"action":"arrive","duration":0}],"travelSummary":{"duration":183,"length":0},"departure":{"time":"2024-06-17T07:00:24","place":{"name":"民權西路","type":"station","location":{"lat":25.062349,"lng":121.519585}}},"arrival":{"time":"2024-06-17T07:03:27","place":{"name":"民權西路站 出口10","type":"exit","location":{"lat":25.063063,"lng":121.519791}}},"transport":{"mode":"pedestrian"}},{"type":"pedestrian","actions":[{"action":"depart","duration":19},{"action":"arrive","duration":0}],"travelSummary":{"duration":19,"length":27.458063},"departure":{"time":"2024-06-17T07:03:27","place":{"name":"民權西路站 出口10","type":"exit","location":{"lat":25.063063,"lng":121.519791}}},"arrival":{"time":"2024-06-17T07:03:46","place":{"type":"place","location":{"lat":25.063082,"lng":121.5196}}},"transport":{"mode":"pedestrian"}}]}]}';
+  String result = await getResult(input);
+  print(result);
+}
