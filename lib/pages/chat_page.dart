@@ -55,83 +55,10 @@ class _ChatPageState extends State<ChatPage> {
           centerTitle: true,
           shape: const Border(bottom: BorderSide(color: Colors.grey, width: 3)),
         ),
-        body: Stack(
+        body: Column(
           children: <Widget>[
             _buildMessageList(screenHeight),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                  width: screenWidth,
-                  height: screenHeight * 0.07,
-                  color: Theme.of(context).colorScheme.primary,
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    height: screenHeight * 0.055,
-                    width: screenWidth * 0.9,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                            color: const Color.fromARGB(255, 219, 219, 219),
-                            width: 3.5)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(
-                          width: screenWidth * 0.024,
-                        ),
-                        Expanded(
-                            child: TextField(
-                          minLines: 1,
-                          maxLines: 6,
-                          controller: inputController,
-                          keyboardType: TextInputType.multiline,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: screenWidth * 0.049, height: 1),
-                          cursorColor: Colors.black,
-                          cursorWidth: 2.5,
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(0.0),
-                              hintText: "Input message here",
-                              hintStyle: TextStyle(
-                                  color:
-                                      const Color.fromARGB(255, 173, 173, 173),
-                                  fontSize: screenWidth * 0.045,
-                                  fontWeight: FontWeight.normal),
-                              border: InputBorder.none),
-                        )),
-                        IconButton(
-                          icon: const Icon(Icons.send),
-                          iconSize: screenWidth * 0.056,
-                          color: const Color.fromARGB(255, 138, 138, 138),
-                          onPressed: isGeneratingResponse
-                              ? null
-                              : () {
-                                  String text = inputController.text;
-
-                                  if (text.isNotEmpty) {
-                                    String formattedDate = DateFormat('HH:mm')
-                                        .format(DateTime.now());
-
-                                    setState(() {
-                                      isGeneratingResponse = true;
-                                      messageList.add(Message(
-                                          isSelf: true,
-                                          message: text,
-                                          timestamp: formattedDate));
-                                      inputController.clear();
-                                    });
-
-                                    _askQuestion(text);
-                                  }
-                                },
-                        )
-                      ],
-                    ),
-                  )),
-            ),
+            _buildInputBox(screenWidth, screenHeight),
           ],
         ));
   }
@@ -142,9 +69,10 @@ class _ChatPageState extends State<ChatPage> {
     await Future.delayed(const Duration(seconds: 5), () {
       if (result.isNotEmpty) {
         String formattedDate = DateFormat('HH:mm').format(DateTime.now());
+        String response = "$result 😎";
         setState(() {
           messageList.add(Message(
-              isSelf: false, message: result, timestamp: formattedDate));
+              isSelf: false, message: response, timestamp: formattedDate));
           isGeneratingResponse = false;
         });
       }
@@ -152,16 +80,95 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildMessageList(double screenHeight) {
-    return ListView(
-      padding: EdgeInsets.only(
-          top: screenHeight * 0.016, bottom: screenHeight * 0.085),
-      physics: const BouncingScrollPhysics(),
-      children: messageList
-          .map((message) => MessageBox(
-              isSelf: message.isSelf,
-              message: message.message,
-              time: message.timestamp))
-          .toList(),
+    return Expanded(
+      child: ListView(
+        shrinkWrap: true,
+        padding: EdgeInsets.only(top: screenHeight * 0.016),
+        physics: const BouncingScrollPhysics(),
+        children: messageList
+            .map((message) => MessageBox(
+                isSelf: message.isSelf,
+                message: message.message,
+                time: message.timestamp))
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildInputBox(double screenWidth, double screenHeight) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+          width: screenWidth,
+          height: screenHeight * 0.07,
+          color: Theme.of(context).colorScheme.primary,
+          alignment: Alignment.topCenter,
+          child: Container(
+            height: screenHeight * 0.055,
+            width: screenWidth * 0.9,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                    color: const Color.fromARGB(255, 219, 219, 219),
+                    width: 3.5)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  width: screenWidth * 0.024,
+                ),
+                Expanded(
+                    child: TextField(
+                  minLines: 1,
+                  maxLines: 6,
+                  controller: inputController,
+                  keyboardType: TextInputType.multiline,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: screenWidth * 0.049, height: 1),
+                  cursorColor: Colors.black,
+                  cursorWidth: 2.5,
+                  decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(0.0),
+                      hintText: isGeneratingResponse
+                          ? "Generating response..."
+                          : "Input message here",
+                      hintStyle: TextStyle(
+                          color: const Color.fromARGB(255, 173, 173, 173),
+                          fontSize: screenWidth * 0.045,
+                          fontWeight: FontWeight.normal),
+                      border: InputBorder.none),
+                )),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  iconSize: screenWidth * 0.056,
+                  color: const Color.fromARGB(255, 138, 138, 138),
+                  onPressed: isGeneratingResponse
+                      ? null
+                      : () {
+                          String text = inputController.text;
+
+                          if (text.isNotEmpty) {
+                            String formattedDate =
+                                DateFormat('HH:mm').format(DateTime.now());
+
+                            setState(() {
+                              isGeneratingResponse = true;
+                              messageList.add(Message(
+                                  isSelf: true,
+                                  message: text,
+                                  timestamp: formattedDate));
+                              inputController.clear();
+                            });
+
+                            _askQuestion(text);
+                          }
+                        },
+                )
+              ],
+            ),
+          )),
     );
   }
 }
