@@ -25,8 +25,14 @@ class ApiManager {
     // String error_message = "抱歉，我有點看不懂QQ\n要再麻煩你告訴我一次你的起點、目的地，以及希望省錢還是省時間喔！";
 
     if (inputString.length > 200) {
-      return "抱歉，你的訊息有點太長了，我小小的腦袋裝不下QQ\n可以麻煩你用簡短的文字告訴我，你的起點、目的地，以及希望省錢還是省時間嗎？";
+      return jsonEncode({
+        'result': false,
+        'data': '''抱歉，你的訊息有點太長了，我小小的腦袋裝不下QQ
+
+可以麻煩你用簡短的文字告訴我，你的起點、目的地，以及希望省錢還是省時間嗎？'''
+      });
     }
+
 
     String AItoMAP = await openai_receive_unit.getResult(inputString);
     // logger.i('AItoMAP: $AItoMAP');

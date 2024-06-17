@@ -67,35 +67,36 @@ bool isValidResult(String result) {
   if (result.contains("error")) {
     return false;
   }
+  return true;
 
-  try {
-    // 解析 JSON 字串
-    final decoded = json.decode(result);
+  // try {
+  //   // 解析 JSON 字串
+  //   final decoded = json.decode(result);
 
-    // 檢查 JSON 是否包含所需的鍵
-    if (decoded is Map<String, dynamic> &&
-        decoded.containsKey('origin') &&
-        decoded.containsKey('destination') &&
-        decoded.containsKey('preference')) {
+  //   // 檢查 JSON 是否包含所需的鍵
+  //   if (decoded is Map<String, dynamic> &&
+  //       decoded.containsKey('origin') &&
+  //       decoded.containsKey('destination') &&
+  //       decoded.containsKey('preference')) {
 
-      // 檢查 'origin' 和 'destination' 是否為非空字串
-      final origin = decoded['origin'];
-      final destination = decoded['destination'];
-      final preference = decoded['preference'];
+  //     // 檢查 'origin' 和 'destination' 是否為非空字串
+  //     final origin = decoded['origin'];
+  //     final destination = decoded['destination'];
+  //     final preference = decoded['preference'];
 
-      if (origin is String && origin.isNotEmpty &&
-          destination is String && destination.isNotEmpty &&
-          preference is String &&
-          (preference == '省錢' || preference == '省時間' || preference == '無')) {
-        return true;
-      }
-    }
-  } catch (e) {
-    // JSON 解析錯誤或其他錯誤
-    // print('Error parsing JSON: $e');
-    return false;
-  }
-  return false;
+  //     if (origin is String && origin.isNotEmpty &&
+  //         destination is String && destination.isNotEmpty &&
+  //         preference is String &&
+  //         (preference == '省錢' || preference == '省時間' || preference == '無')) {
+  //       return true;
+  //     }
+  //   }
+  // } catch (e) {
+  //   // JSON 解析錯誤或其他錯誤
+  //   // print('Error parsing JSON: $e');
+  //   return false;
+  // }
+  // return false;
 }
 
 Future<String> getResult(String input) async {
