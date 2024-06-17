@@ -129,5 +129,5 @@ Future<void> main() async {
   String result = await tdxUnit.getResult(input);
 
   // print(result);
-  stdout.write('Length of result: ' + result.length.toString());
+  stdout.write('Length of result: ${result.length}');
 }
