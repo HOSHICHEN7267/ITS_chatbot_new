@@ -4,7 +4,7 @@ import 'openai_receive_unit.dart' as openai_receive_unit;
 import 'map_unit.dart' as map_unit;
 import 'tdx_unit.dart.';
 import 'openai_send_unit.dart' as openai_send_unit;
-// import 'network_unit.dart' as network_unit;
+import 'network_unit.dart' as network_unit;
 
 final logger = Logger();
 final connectErrorMessage = jsonEncode(
@@ -14,9 +14,9 @@ class ApiManager {
   TdxUnit tdxUnit = TdxUnit();
 
   Future<String> getResult(String inputString) async {
-    // if (!(await network_unit.isConnect())) {
-    //   return connectErrorMessage;
-    // }
+    if (!(await network_unit.isConnect())) {
+      return connectErrorMessage;
+    }
 
     // String error_message = "抱歉，我有點看不懂QQ\n要再麻煩你告訴我一次你的起點、目的地，以及希望省錢還是省時間喔！";
 
