@@ -68,7 +68,7 @@ class MessageBox extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Image.asset(
-                  'asset/headshot.jpg',
+                  'asset/headshot.png',
                   width: screenWidth * 0.145,
                   height: screenWidth * 0.145,
                   fit: BoxFit.cover,
